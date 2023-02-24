@@ -29,6 +29,8 @@ typedef struct Automate
 
 /* les fonctions*/
 
+void GetInput(char text[], Automate *A1);
+void getAutomate(Automate *A1);
 void GetInput(char text[], Automate *A1); // read the automaton from the file
 void getAutomate(Automate *A1);           // just to store all the distinct states and symbols of the automaton
 int isInitial(char name[], Automate A1);
