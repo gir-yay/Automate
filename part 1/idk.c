@@ -17,57 +17,40 @@ typedef struct arcs
       char depart[100];
       char dest[100];
       char etiquette[100];
-
 } arcs;
 
-/*des variables globales*/
+typedef struct Automate
+{
+      nom etats[100];
+      nom etiquettes[100];
+      nom etat_init[100];
+      nom etat_fin[100];
+      arcs arc[100];
+      int nb_arcs, nb_etats, nb_etiquettes, nb_etat_init, nb_etat_fin;
 
-int nb_arcs = 0, nb_etats = 0, nb_etiquettes = 0, nb_etat_init = 0, nb_etat_fin = 0;
-
-/*des structures globales*/
-
-arcs arc[100];
-nom etats[100];
-nom etiquettes[100];
-nom etat_init[100];
-nom etat_fin[100];
+} Automate;
 
 /* les fonctions*/
 
-void GetInput(FILE *fichier);
-void getAutomate();
-int isInitial(char name[]);
-int isFinal(char name[]);
-void afficher_arcs();
-void afficher_plus();
-void generer_dot();
+void GetInput(char text[], Automate *A1);
+int isInitial(char name[], Automate A1);
+int isFinal(char name[], Automate A1);
+void afficher_arcs(Automate A1);
+void generer_dot(Automate A1, char name[]);
+int tester_automate(char *mot, Automate A1);
+void tester_from_file(Automate A1, char text[]);
 
 /* the main function*/
-
 int main(int argc, char *argv[])
 {
-      FILE *fichier;
-      fichier = fopen("input.txt", "r");
+      Automate A;
 
-      if (fichier == NULL)
-      {
-            printf("ERROR!\n");
-            exit(1);
-      }
+      char text1[] = "automate1.txt";
+      GetInput(text1, &A);
 
-      GetInput(fichier);
-      afficher_arcs();
-
-      afficher_plus();
-
-      fclose(fichier);
-
-      FILE *file = NULL;
-      file = fopen("input.dot", "w");
-
-      generer_dot(file);
-
-      fclose(file);
+      afficher_arcs(A);
+      char name[] = "output.dot";
+      generer_dot(A, name);
 
       return 0;
 }
@@ -77,13 +60,21 @@ cette fct lit les donnes du fichier dans ses parametres
 les deux premiers linges sont pour les etas initiaux et finaux
 les autres sont pour les iterations
 */
-void GetInput(FILE *fichier)
+void GetInput(char text[], Automate *A1)
 {
+      FILE *fichier;
+      fichier = fopen(text, "r");
+
+      if (fichier == NULL)
+      {
+            printf("ERROR!\n");
+            exit(1);
+      }
+
       int i, j;
       char c;
 
       char ligne[100];
-      // char *token;
       int NombreLines = 1;
       char temp[2];
 
@@ -99,9 +90,9 @@ void GetInput(FILE *fichier)
       // recuperation des Transitions
       for (i = 0; i < (NombreLines - 2); i++)
       {
-            fscanf(fichier, "%s %s %s", arc[i].depart, arc[i].dest, arc[i].etiquette);
+            fscanf(fichier, "%s %s %s", A1->arc[i].depart, A1->arc[i].dest, A1->arc[i].etiquette);
       }
-      nb_arcs = i - 1;
+      A1->nb_arcs = i - 1;
 
       // stocker les etats initiaux
       j = 0;
@@ -114,9 +105,9 @@ void GetInput(FILE *fichier)
                   {
                         temp[0] = ligne[i];
                         temp[1] = '\0';
-                        strcpy(etat_init[j].nom, temp);
+                        strcpy(A1->etat_init[j].nom, temp);
                         j++;
-                        nb_etat_init++;
+                        A1->nb_etat_init++;
                   }
             }
       }
@@ -132,12 +123,13 @@ void GetInput(FILE *fichier)
                   {
                         temp[0] = ligne[i];
                         temp[1] = '\0';
-                        strcpy(etat_fin[j].nom, temp);
+                        strcpy(A1->etat_fin[j].nom, temp);
                         j++;
-                        nb_etat_fin++;
+                        A1->nb_etat_fin++;
                   }
             }
       }
+      fclose(fichier);
 }
 
 void getAutomate()
@@ -212,12 +204,12 @@ void getAutomate()
 }
 
 // si on veut savoir si un etat est initial , elle sera utiliser plus tard
-int isInitial(char name[])
+int isInitial(char name[], Automate A1)
 {
       int i;
-      for (i = 0; i < nb_etat_init; i++)
+      for (i = 0; i < A1.nb_etat_init; i++)
       {
-            if (strcmp(name, etat_init[i].nom) == 0)
+            if (strcmp(name, A1.etat_init[i].nom) == 0)
             {
                   return 1;
             }
@@ -226,13 +218,13 @@ int isInitial(char name[])
 }
 
 // si on veut savoir si un etat est final , elle sera utiliser plus tard
-int isFinal(char name[])
+int isFinal(char name[], Automate A1)
 {
       int i;
 
-      for (i = 0; i < nb_etats; i++)
+      for (i = 0; i < A1.nb_etat_fin; i++)
       {
-            if (strcmp(name, etat_fin[i].nom) == 0)
+            if (strcmp(name, A1.etat_fin[i].nom) == 0)
             {
                   return 1;
             }
@@ -241,14 +233,17 @@ int isFinal(char name[])
 }
 
 // afficher les iterations
-void afficher_arcs()
+void afficher_arcs(Automate A1)
 {
       int i;
-      for (i = 0; i <= nb_arcs; i++)
+      for (i = 0; i <= A1.nb_arcs; i++)
       {
-            printf("(%s) ---(%s)---> (%s)\n", arc[i].depart, arc[i].dest, arc[i].etiquette);
+            printf("(%s) ---(%s)---> (%s)\n", A1.arc[i].depart, A1.arc[i].dest, A1.arc[i].etiquette);
       }
 }
+
+
+
 
 void afficher_plus()
 {
@@ -294,8 +289,10 @@ void afficher_plus()
       }
 }
 
-void generer_dot(FILE *file)
+void generer_dot(Automate A1, char name[])
 {
+      FILE *file = NULL;
+      file = fopen(name, "w");
 
       int i;
       fprintf(file, "digraph automate {\n");
@@ -303,28 +300,30 @@ void generer_dot(FILE *file)
       fprintf(file, "node [fontname=\"Helvetica,Arial,sans-serif\"]\n");
       fprintf(file, "edge [fontname=\"Helvetica,Arial,sans-serif\"]\n");
       fprintf(file, "rankdir=LR;\n");
-      fprintf(file, "node [shape = doublecircle ;];\n");
+      fprintf(file, "node [shape = doublecircle ;]\n");
 
-      for (i = 0; i < nb_etat_fin; i++)
+      for (i = 0; i < A1.nb_etat_fin; i++)
       {
 
-            fprintf(file, "%s;\t", etat_fin[i].nom);
+            fprintf(file, ";%s\t", A1.etat_fin[i].nom);
       }
-      fprintf(file, "node [shape = square ;];\n");
+      fprintf(file, "\nnode [shape = square ;];\n");
 
-      for (i = 0; i < nb_etat_init; i++)
+      for (i = 0; i < A1.nb_etat_init; i++)
       {
 
-            fprintf(file, "%s;\t", etat_init[i].nom);
+            fprintf(file, "%s;\t", A1.etat_init[i].nom);
       }
 
       fprintf(file, "\nnode [shape = circle];\n");
 
-      for (i = 0; i <= nb_arcs; i++)
+      for (i = 0; i <= A1.nb_arcs; i++)
       {
 
-            fprintf(file, " %s -> %s [label = \"%s\";];\n", arc[i].depart, arc[i].dest, arc[i].etiquette);
+            fprintf(file, " %s -> %s [label = \"%s\";];\n", A1.arc[i].depart, A1.arc[i].dest, A1.arc[i].etiquette);
       }
 
       fprintf(file, "}\n");
+
+      fclose(file);
 }
