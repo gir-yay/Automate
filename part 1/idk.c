@@ -2,45 +2,42 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*les structures*/
-// on peut avoir des chaine comme alphabet ou nom d'etat
-
-typedef struct nom
+typedef struct nom // name
 {
       char nom[100];
 } nom;
 
-/*les arcs*/
+/*transitions*/
 
 typedef struct arcs
 {
-      char depart[100];
-      char dest[100];
-      char etiquette[100];
+      char depart[100];    // from
+      char dest[100];      // to or destination
+      char etiquette[100]; // symbol or alphabet
 } arcs;
 
 typedef struct Automate
 {
-      nom etats[100];
-      nom etiquettes[100];
-      nom etat_init[100];
-      nom etat_fin[100];
-      arcs arc[100];
-      int nb_arcs, nb_etats, nb_etiquettes, nb_etat_init, nb_etat_fin;
+      nom etats[100];                                                  // state
+      nom etiquettes[100];                                             // symbol or alphabet
+      nom etat_init[100];                                              // initial states
+      nom etat_fin[100];                                               // final states
+      arcs arc[100];                                                   // iterations
+      int nb_arcs, nb_etats, nb_etiquettes, nb_etat_init, nb_etat_fin; // nb for number
 
 } Automate;
 
 /* les fonctions*/
 
-void GetInput(char text[], Automate *A1);
-void getAutomate(Automate *A1);
+void GetInput(char text[], Automate *A1); // read the automaton from the file
+void getAutomate(Automate *A1);           // just to store all the distinct states and symbols of the automaton
 int isInitial(char name[], Automate A1);
 int isFinal(char name[], Automate A1);
-void afficher_arcs(Automate A1);
-void afficher_plus(Automate A1);
-void generer_dot(Automate A1, char name[]);
-int tester_automate(char *mot, Automate A1);
-void tester_from_file(Automate A1, char text[]);
+void afficher_arcs(Automate A1);                 // display transitions
+void afficher_plus(Automate A1);                 // display more basically the information that we got thanks to getAutomate()
+void generer_dot(Automate A1, char name[]);      // generate a .dot file that describe the graph of the automaton
+int tester_automate(char *mot, Automate A1);     // test if a word is of that automaton
+void tester_from_file(Automate A1, char text[]); // use a file to test many words
 
 /* the main function*/
 int main(int argc, char *argv[])
@@ -59,11 +56,8 @@ int main(int argc, char *argv[])
       return 0;
 }
 
-/*
-cette fct lit les donnes du fichier dans ses parametres
-les deux premiers linges sont pour les etas initiaux et finaux
-les autres sont pour les iterations
-*/
+// this function is not really necessary !!!
+
 void GetInput(char text[], Automate *A1)
 {
       FILE *fichier;
@@ -78,9 +72,9 @@ void GetInput(char text[], Automate *A1)
       int i, j;
       char c;
 
-      char ligne[100];
-      int NombreLines = 1;
-      char temp[2];
+      char ligne[100];     // line
+      int NombreLines = 1; // number of lines of the file
+      char temp[2];        // just to transform each letter of the line to a string
 
       while ((c = fgetc(fichier)) != EOF)
       {
@@ -139,13 +133,13 @@ void GetInput(char text[], Automate *A1)
 void getAutomate(Automate *A1)
 {
 
-      int etat_i = 0, etiq_i = 0, b, j, i;
+      int etat_i = 0, etiq_i = 0, b, j, i; // etat == state
 
-      strcpy(A1->etats[0].nom, A1->arc[0].depart); // on stocke le premier etats de depart puis on commence les comparaisons
+      strcpy(A1->etats[0].nom, A1->arc[0].depart);
 
       A1->nb_etats = 1;
       etat_i = 1;
-      // on veut pas stocker le meme etat plusieurs fois
+
       for (i = 0; i <= A1->nb_arcs; i++)
       {
 
@@ -182,8 +176,6 @@ void getAutomate(Automate *A1)
             }
       }
 
-      // stocker les etiquettes
-
       strcpy(A1->etiquettes[0].nom, A1->arc[0].etiquette);
       A1->nb_etiquettes = 1;
       etiq_i = 1;
@@ -207,7 +199,6 @@ void getAutomate(Automate *A1)
       }
 }
 
-// si on veut savoir si un etat est initial , elle sera utiliser plus tard
 int isInitial(char name[], Automate A1)
 {
       int i;
@@ -221,7 +212,6 @@ int isInitial(char name[], Automate A1)
       return 0;
 }
 
-// si on veut savoir si un etat est final , elle sera utiliser plus tard
 int isFinal(char name[], Automate A1)
 {
       int i;
@@ -236,7 +226,7 @@ int isFinal(char name[], Automate A1)
       return 0;
 }
 
-// afficher les iterations
+// show iterations
 void afficher_arcs(Automate A1)
 {
       int i;
@@ -246,6 +236,8 @@ void afficher_arcs(Automate A1)
       }
 }
 
+// show more
+// this function is not necessary too!!!
 void afficher_plus(Automate A1)
 {
       int j;
