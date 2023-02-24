@@ -87,14 +87,14 @@ void GetInput(char text[], Automate *A1)
       }
 
       rewind(fichier);
-      // recuperation des Transitions
+      // get all Transitions
       for (i = 0; i < (NombreLines - 2); i++)
       {
             fscanf(fichier, "%s %s %s", A1->arc[i].depart, A1->arc[i].dest, A1->arc[i].etiquette);
       }
       A1->nb_arcs = i - 1;
 
-      // stocker les etats initiaux
+      // stocking the initial states
       j = 0;
       if (fscanf(fichier, "%s", ligne) == 1)
       {
@@ -112,7 +112,7 @@ void GetInput(char text[], Automate *A1)
             }
       }
 
-      // recuperation de la dernière ligne (etats finaux)
+      // stocking the final states
       j = 0;
       if (fscanf(fichier, "%s", ligne) == 1)
       {
@@ -248,7 +248,6 @@ void afficher_plus(Automate A1)
 
       printf("\n nombre des etats : %d", A1.nb_etats);
 
-      // on utilise les isInitial et isFinal pour afficher  les etats initiaux et finaux avec des ->
       for (j = 0; j < A1.nb_etats; j++)
       {
             if (isInitial(A1.etats[j].nom, A1) == 1 && isFinal(A1.etats[j].nom, A1) == 1)
@@ -277,7 +276,7 @@ void afficher_plus(Automate A1)
 
       printf("\n nombre des etiquettes : %d", A1.nb_etiquettes);
 
-      // affiche les etiquettes
+      // show all the distinct symbols
       for (j = 0; j < A1.nb_etiquettes; j++)
       {
             printf("\n|%s|", A1.etiquettes[j].nom);
