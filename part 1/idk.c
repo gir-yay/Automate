@@ -33,7 +33,7 @@ typedef struct Automate
 /* les fonctions*/
 
 void GetInput(char text[], Automate *A1);
-void getAutomate(Automate *A1)
+void getAutomate(Automate *A1);
 int isInitial(char name[], Automate A1);
 int isFinal(char name[], Automate A1);
 void afficher_arcs(Automate A1);
@@ -47,10 +47,12 @@ int main(int argc, char *argv[])
 {
       Automate A;
 
-      char text1[] = "automate1.txt";
+      char text1[] = "input.txt";
       GetInput(text1, &A);
+      getAutomate(&A);
 
       afficher_arcs(A);
+      afficher_plus(A);
       char name[] = "output.dot";
       generer_dot(A, name);
 
@@ -139,18 +141,18 @@ void getAutomate(Automate *A1)
 
       int etat_i = 0, etiq_i = 0, b, j, i;
 
-      strcpy(A1->etats[0].nom, A1.arc[0].depart); // on stocke le premier etats de depart puis on commence les comparaisons
+      strcpy(A1->etats[0].nom, A1->arc[0].depart); // on stocke le premier etats de depart puis on commence les comparaisons
 
-      nb_etats = 1;
+      A1->nb_etats = 1;
       etat_i = 1;
       // on veut pas stocker le meme etat plusieurs fois
-      for (i = 0; i <= A1.nb_arcs; i++)
+      for (i = 0; i <= A1->nb_arcs; i++)
       {
 
             b = 0;
-            for (j = 0; j < A1.nb_etats; j++)
+            for (j = 0; j < A1->nb_etats; j++)
             {
-                  if (strcmp(A1.arc[i].depart, A1.etats[j].nom) == 0)
+                  if (strcmp(A1->arc[i].depart, A1->etats[j].nom) == 0)
                   {
                         b = 1;
                   }
@@ -158,15 +160,15 @@ void getAutomate(Automate *A1)
             if (b == 0)
             {
 
-                  strcpy(A1->etats[etat_i].nom, A1.arc[i].depart);
+                  strcpy(A1->etats[etat_i].nom, A1->arc[i].depart);
                   etat_i++;
-                  nb_etats++;
+                  A1->nb_etats++;
             }
 
             b = 0;
-            for (j = 0; j < A1.nb_etats; j++)
+            for (j = 0; j < A1->nb_etats; j++)
             {
-                  if (strcmp(A1.arc[i].dest, A1.etats[j].nom) == 0)
+                  if (strcmp(A1->arc[i].dest, A1->etats[j].nom) == 0)
                   {
                         b = 1;
                   }
@@ -174,33 +176,33 @@ void getAutomate(Automate *A1)
             if (b == 0)
             {
 
-                  strcpy(A1->etats[etat_i].nom, A1.arc[i].dest);
+                  strcpy(A1->etats[etat_i].nom, A1->arc[i].dest);
                   etat_i++;
-                  nb_etats++;
+                  A1->nb_etats++;
             }
       }
 
       // stocker les etiquettes
 
-      strcpy(A1->etiquettes[0].nom, A1.arc[0].etiquette);
-      nb_etiquettes = 1;
+      strcpy(A1->etiquettes[0].nom, A1->arc[0].etiquette);
+      A1->nb_etiquettes = 1;
       etiq_i = 1;
 
-      for (i = 0; i <= A1.nb_arcs; i++)
+      for (i = 0; i <= A1->nb_arcs; i++)
       {
             b = 0;
-            for (j = 0; j < A1.nb_etiquettes; j++)
+            for (j = 0; j < A1->nb_etiquettes; j++)
             {
-                  if (strcmp(A1.arc[i].etiquette, A1.etiquettes[j].nom) == 0)
+                  if (strcmp(A1->arc[i].etiquette, A1->etiquettes[j].nom) == 0)
                   {
                         b = 1;
                   }
             }
             if (b == 0)
             {
-                  strcpy(A1->etiquettes[etiq_i].nom, A1.arc[i].etiquette);
+                  strcpy(A1->etiquettes[etiq_i].nom, A1->arc[i].etiquette);
                   etiq_i++;
-                  nb_etiquettes++;
+                  A1->nb_etiquettes++;
             }
       }
 }
@@ -244,9 +246,6 @@ void afficher_arcs(Automate A1)
       }
 }
 
-
-
-
 void afficher_plus(Automate A1)
 {
       int j;
@@ -258,25 +257,25 @@ void afficher_plus(Automate A1)
       // on utilise les isInitial et isFinal pour afficher  les etats initiaux et finaux avec des ->
       for (j = 0; j < A1.nb_etats; j++)
       {
-            if (isInitial(A1.etats[j].nom,A1) == 1 && isFinal(A1.etats[j].nom,A1) == 1)
+            if (isInitial(A1.etats[j].nom, A1) == 1 && isFinal(A1.etats[j].nom, A1) == 1)
             {
                   printf("\n[<-%s->]", A1.etats[j].nom);
             }
             else
             {
-                  if (isInitial(A1.etats[j].nom,A1) == 1)
+                  if (isInitial(A1.etats[j].nom, A1) == 1)
                   {
-                        printf("\n[->%s]", etats[j].nom);
+                        printf("\n[->%s]", A1.etats[j].nom);
                   }
                   else
                   {
-                        if (isFinal(A1.etats[j].nom,A1) == 1)
+                        if (isFinal(A1.etats[j].nom, A1) == 1)
                         {
-                              printf("\n[%s->]", etats[j].nom);
+                              printf("\n[%s->]", A1.etats[j].nom);
                         }
                         else
                         {
-                              printf("\n[%s]", etats[j].nom);
+                              printf("\n[%s]", A1.etats[j].nom);
                         }
                   }
             }
