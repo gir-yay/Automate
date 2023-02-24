@@ -33,7 +33,7 @@ typedef struct Automate
 /* les fonctions*/
 
 void GetInput(char text[], Automate *A1);
-void getAutomate(Automate *A1)
+void getAutomate(Automate *A1);
 int isInitial(char name[], Automate A1);
 int isFinal(char name[], Automate A1);
 void afficher_arcs(Automate A1);
