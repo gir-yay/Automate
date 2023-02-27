@@ -12,3 +12,6 @@ An assignment of many parts
 - Show the automaton.
 
 ## Part 2:
+
+- Check if a word is accepted by an **Automaton**
+- Check a list of words...
