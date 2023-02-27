@@ -1,4 +1,4 @@
-# Automate
+# Automaton
 
 An assignment of many parts
 
