@@ -35,13 +35,13 @@ void GetInput(char text[], Automate *A1); // read the automaton from the file
 void getAutomate(Automate *A1);           // just to store all the distinct states and symbols of the automaton
 int isInitial(char name[], Automate A1);
 int isFinal(char name[], Automate A1);
-void afficher_arcs(Automate A1);                 // display transitions
-void afficher_plus(Automate A1);                 // display more basically the information that we got thanks to getAutomate()
-void generer_dot(Automate A1, char name[]);      // generate a .dot file that describe the graph of the automaton
-int tester_automate(char *mot, Automate A1);     // test if a word is of that automaton
-void tester_from_file(Automate A1, char text[]); // use a file to test many words
+void afficher_arcs(Automate A1);                 /* display transitions */
+void afficher_plus(Automate A1);                 /* display more , basically the information that we got thanks to getAutomate() */
+void generer_dot(Automate A1, char name[]);      /* generate a .dot file that describe the graph of the automaton */
+int tester_automate(char *mot, Automate A1);     /* test if a word is of that automaton */
+void tester_from_file(Automate A1, char text[]); /* use a file to test many words*/
 
-/* the main function*/
+/*-------------------------- the main function------------------------*/
 int main(int argc, char *argv[])
 {
       Automate A;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
       return 0;
 }
 
-// this function is not really necessary !!!
+/* this function is not really necessary !!! */
 
 void GetInput(char text[], Automate *A1)
 {
@@ -75,8 +75,8 @@ void GetInput(char text[], Automate *A1)
       char c;
 
       char ligne[100];     // line
-      int NombreLines = 1; // number of lines of the file
-      char temp[2];        // just to transform each letter of the line to a string
+      int NombreLines = 1; /* number of lines of the file */
+      char temp[2];        /* just to transform each letter of the line to a string */
 
       while ((c = fgetc(fichier)) != EOF)
       {

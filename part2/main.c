@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
       char list[] = "liste.txt"; /* Name of the file containing our list of words */
 
-      printf("\nLet us test the words of the file %s, we will print onlt the accepted words!\n\n", list);
+      printf("\nLet us test the words of the file %s, we will print only the accepted words!\n\n", list);
 
       test_from_file(A, list);
 
