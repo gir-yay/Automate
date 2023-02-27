@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
       char text1[] = "automate1.txt"; /* name of the file of the automaton*/
       GetInput(text1, &A);            /* stocking info of the file in the struct Automate A */
 
-      // FOR Part 1 AND NOT NECESSARY FOR PART 2
+      /* FOR Part 1 AND NOT NECESSARY FOR PART 2 */
 
       show_iterations(A);
       char name[] = "output.dot";
@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
 int test(char *word, Automaton A1)
 {
       int i, j, k;
-      char current_node[100];    // current state
-      int length = strlen(word); // words' length
+      char current_node[100]; // current state
+      int length = strlen(word);
 
       char temp[2];
 
