@@ -20,7 +20,7 @@ An assignment of many parts
 
 - Union of two automata.
 - Kleene star of an automaton.
-- Product constraction of two automaton.
+- Product construction of two automaton(Intersection).
 
 ## Part 4
 
