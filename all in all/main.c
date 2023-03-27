@@ -627,7 +627,7 @@ void Automaton_Union(Automaton *A, Automaton *AA, Automaton *Union)
       Union->nb_iterations = k;
 }
 
-void Automate_Etoile(Automaton *A, Automaton *star)
+void Automaton_star(Automaton *A, Automaton *star)
 {
       int i, j, k;
       star->nb_init_state = 1;
