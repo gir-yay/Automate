@@ -325,7 +325,7 @@ void GetInput(char text[], Automaton *A1)
       fclose(fichier);
 }
 
-void getAutomate(Automaton *A1)
+void getAutomaton(Automaton *A1)
 {
 
       int etat_i = 0, etiq_i = 0, b, j, i;
