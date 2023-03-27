@@ -1,5 +1,0 @@
-b
-a
-aa
-aac
-c
