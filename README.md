@@ -15,3 +15,15 @@ An assignment of many parts
 
 - Check if a word is accepted by an **Automaton**
 - Check a list of words...
+
+## Part 3
+
+- Union of two automata.
+- Kleene star of an automaton.
+- Product constraction of two automaton.
+
+## Part 4
+
+- Delete epsilon transitions from an automaton.
+- NFA to DFA (not done yet)
+- Minimising an automaton (not done yet)
