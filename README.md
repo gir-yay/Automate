@@ -25,5 +25,5 @@ An assignment of many parts
 ## Part 4
 
 - Delete epsilon transitions from an automaton.
-- NFA to DFA (not done yet)
-- Minimising an automaton (not done yet)
+- NFA to DFA 
+- Minimising an automaton 
