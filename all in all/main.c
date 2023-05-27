@@ -71,6 +71,8 @@ void Automaton_Product(Automaton *A, Automaton *AA, Automaton *Product);
 int isreached(char *etat, Automaton *A);
 Automaton reached(Automaton *A);
 Automaton delete_epsilon(Automaton *A);
+char *get_new_state(Automaton *nfa, char *state, char *symbol);
+Automaton nfa_to_dfa(Automaton *nfa);
 
 /* ---------------------- the main function ---------------*/
 
@@ -227,6 +229,13 @@ int main(int argc, char *argv[])
 
                   break;
             case 8:
+                  Automaton dfa = nfa_to_dfa(&u_sanseps);
+                  getAutomaton(&dfa);
+                  show_iterations(&dfa);
+                  generate_dot(&dfa, "dfa.dot");
+                  break;
+
+            case 9:
 
                   /*Free Memory*/
 
@@ -240,7 +249,7 @@ int main(int argc, char *argv[])
                   exit(1);
             }
 
-      } while (choice != 8);
+      } while (choice != 9);
 
       return 0;
 }
@@ -405,7 +414,8 @@ int menu()
       printf("5-Product : generate .dot\n");
       printf("6-Delete the epsilon transitions from the union\n");
       printf("7-Delete the epsilon transitions from the kleene stars\n");
-      printf("8-Quitter...\n");
+      printf("8-NFA to DFA\n");
+      printf("9-Quitter...\n");
       printf("your choice is :  ");
 
       scanf("%d", &choice);
@@ -919,4 +929,53 @@ Automaton delete_epsilon(Automaton *A)
       {
             return delete_epsilon(&sanseps);
       }
+}
+
+char *get_new_state(Automaton *nfa, char *state, char *symbol)
+{
+      for (int i = 0; i <= nfa->nb_iterations; i++)
+            if (strcmp(nfa->iterations[i].from, state) == 0 && strcmp(nfa->iterations[i].symbol, symbol) == 0)
+                  return nfa->iterations[i].dest;
+      return NULL;
+}
+
+// Function to convert NFA to DFA
+Automaton nfa_to_dfa(Automaton *nfa)
+{
+      Automaton dfa;
+      // Initialize DFA
+      dfa.nb_nodes = 0;
+      dfa.nb_symbols = nfa->nb_symbols;
+      memcpy(dfa.symbols, nfa->symbols, sizeof(name) * nfa->nb_symbols);
+      dfa.nb_init_state = 1;
+      memcpy(dfa.init_state, nfa->init_state, sizeof(name) * nfa->nb_init_state);
+      dfa.nb_final_state = 0;
+      dfa.nb_iterations = 0;
+
+      // For each state in NFA
+      for (int i = 0; i < nfa->nb_nodes; i++)
+      {
+            // Add it to DFA
+            strcpy(dfa.nodes[dfa.nb_nodes++].name, nfa->nodes[i].name);
+            // If it's a final state in NFA, add it to final states in DFA
+            if (isFinal(nfa->nodes[i].name, nfa))
+                  strcpy(dfa.final_state[dfa.nb_final_state++].name, nfa->nodes[i].name);
+            // For each symbol
+            for (int j = 0; j < nfa->nb_symbols; j++)
+            {
+                  // Get the new state
+                  char *new_state = get_new_state(nfa, nfa->nodes[i].name, nfa->symbols[j].name);
+                  // If the new state is not NULL, add an iteration to DFA
+                  if (new_state)
+                  {
+                        strcpy(dfa.iterations[dfa.nb_iterations].from, nfa->nodes[i].name);
+                        strcpy(dfa.iterations[dfa.nb_iterations].symbol, nfa->symbols[j].name);
+                        strcpy(dfa.iterations[dfa.nb_iterations++].dest, new_state);
+                  }
+            }
+      }
+
+      dfa.nb_iterations--;
+
+      return dfa;
 }
